@@ -5,15 +5,7 @@
     "DueDate": "2025-01-24T00:00:00",
     "Project": "mat",
     "Status": "pågående",
-    "Done": false
-  },
-  {
-    "Id": 630,
-    "Title": "test test",
-    "DueDate": "2026-05-12T00:00:00",
-    "Project": "test  projekt",
-    "Status": "ny",
-    "Done": false
+    "Done": true
   },
   {
     "Id": 952,

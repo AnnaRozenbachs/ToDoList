@@ -39,8 +39,8 @@ void StartApplication()
             case "3":
                 Console.WriteLine("Enter id of the item in list you want to edit");
                 var id = int.Parse(Console.ReadLine());
-                var editedTask = taskList.Where(t=>t.Id==id).FirstOrDefault();
-                taskList= helper.EditTask(editedTask, taskList);
+                var taskToEdit = taskList.Where(t=>t.Id==id).FirstOrDefault();
+                taskList= helper.EditTask(taskToEdit, taskList);
                 Console.ForegroundColor= ConsoleColor.Green;
                 Console.WriteLine("Task has been updated. Press (4) for saving.");
                 Console.ForegroundColor = ConsoleColor.White;
