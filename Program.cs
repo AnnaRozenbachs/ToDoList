@@ -6,56 +6,65 @@ using ToDoList.Services;
 TaskListHelper helper  = new TaskListHelper();
 var taskList = helper.GetTaskList() == null ? new List<ToDoTask>() : helper.GetTaskList();
 
-while (true)
-{
-    StartApplication();
-}
+
+StartApplication();
 
 
 void StartApplication()
 {
-    Console.WriteLine("Welcome! Pick a option");
+    var taskDone = taskList.Where(t => t.Done).Count();
+    var taskNotDone = taskList.Where(t => !t.Done).Count();
+
+    Console.WriteLine($"Welcome! You have {taskDone} tasks done and {taskNotDone} to do. Pick a option");
     Console.WriteLine("(1) Show Task List");
     Console.WriteLine("(2) Add New Task");
     Console.WriteLine("(3) Edit Task");
     Console.WriteLine("(4) Save");
 
-    var input = Console.ReadLine();
+    
 
-    try
+    while (true)
     {
-        switch (input)
+        var input = Console.ReadLine();
+
+        try
         {
-            case "1":
-                helper.ShowTaskList(taskList);
-                break;
-            case "2":
-                var task = helper.AddNewTask();
-                taskList.Add(task);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Task is created. Press (4) for saving.");
-                Console.ForegroundColor = ConsoleColor.White;
-                break;
-            case "3":
-                Console.WriteLine("Enter id of the item in list you want to edit");
-                var id = int.Parse(Console.ReadLine());
-                var taskToEdit = taskList.Where(t=>t.Id==id).FirstOrDefault();
-                taskList= helper.EditTask(taskToEdit, taskList);
-                Console.ForegroundColor= ConsoleColor.Green;
-                Console.WriteLine("Task has been updated. Press (4) for saving.");
-                Console.ForegroundColor = ConsoleColor.White;
-                break;
-            case "4":
-                helper.Save(taskList);
-                break;
+            switch (input)
+            {
+                case "1":
+                    helper.ShowTaskList(taskList);
+                    break;
+                case "2":
+                    var task = helper.AddNewTask();
+                    taskList.Add(task);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Task is created. Press (4) for saving.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                case "3":
+                    Console.WriteLine("Enter id of the item in list you want to edit");
+                    var id = int.Parse(Console.ReadLine());
+                    var taskToEdit = taskList.Where(t => t.Id == id).FirstOrDefault();
+                    taskList = helper.EditTask(taskToEdit, taskList);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Task has been updated. Press (4) for saving.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                case "4":
+                    helper.Save(taskList);
+                    Environment.Exit(0);
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(e.Message);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
-    catch (Exception e)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(e.Message);
-        Console.ForegroundColor = ConsoleColor.White;
-    }
+
+
 
 
 }
