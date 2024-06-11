@@ -96,7 +96,7 @@ namespace ToDoList.Services
                     taskList = taskList.OrderByDescending(t => t.DueDate).ToList();
                     break;
                 case "2":
-                    taskList = taskList.OrderByDescending(t => t.Project).ToList();
+                    taskList = taskList.OrderBy(t => t.Project).ToList();
                     break;
             }
             Console.ForegroundColor = ConsoleColor.Yellow;
