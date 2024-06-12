@@ -1,6 +1,6 @@
 # ToDoList
 
-TodoList application. The functionality is listing below.
+TodoList application.
 
 --- Create/edit tasks
 --- Show task list

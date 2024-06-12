@@ -12,6 +12,8 @@ namespace ToDoList.Services
     public class TaskListHelper
     {
         private string jsonFile = System.IO.Path.GetFullPath(@"..\..\..\TaskList.json");
+
+        //Load and read tasks from file
         public List<ToDoTask> GetTaskList()
         {           
             var taskList = new List<ToDoTask>();
@@ -22,6 +24,8 @@ namespace ToDoList.Services
             };
             return taskList;
         }
+
+        //Add new task to list
 
         public ToDoTask AddNewTask()
         {
@@ -47,6 +51,8 @@ namespace ToDoList.Services
             return task;           
 
         }
+
+        //Edit a specific task in list
 
         public List<ToDoTask> EditTask(ToDoTask task, List<ToDoTask> taskList)
         {
@@ -86,6 +92,8 @@ namespace ToDoList.Services
             return taskList;
         }
 
+        //Display the list of tasks 
+
         public void ShowTaskList(List<ToDoTask> taskList)
         {
             Console.WriteLine("Choose how you want to show the list. (1) Sorted by date (2) Sorted by project");
@@ -122,6 +130,7 @@ namespace ToDoList.Services
             }
         }
 
+        //Save tasks to file
         public void Save(List<ToDoTask> taskList)
         {
             using (var stramWriter = new StreamWriter(jsonFile))

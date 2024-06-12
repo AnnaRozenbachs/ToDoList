@@ -22,9 +22,10 @@ void StartApplication()
     Console.WriteLine("(4) Save");
 
     
-
+    //This will run until you press 4 for saving
     while (true)
     {
+        //Input from user
         var input = Console.ReadLine();
 
         try
@@ -56,10 +57,16 @@ void StartApplication()
                     break;
             }
         }
-        catch (Exception e)
+        catch (FormatException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(e.Message);
+            Console.WriteLine("Ogiltigt format på något av fälten");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ett fel inträffade och det gick inte att uppdatera. Kolla så att id:t stämmer.");
             Console.ForegroundColor = ConsoleColor.White;
         }
     }
