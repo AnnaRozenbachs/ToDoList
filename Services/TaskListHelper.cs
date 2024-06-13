@@ -124,7 +124,7 @@ namespace ToDoList.Services
                 Console.WriteLine(
                     task.Id.ToString().PadRight(20) +  
                     task.Title.PadRight(20) + 
-                    task.DueDate.ToString("yy-MM-dd").PadRight(20) + 
+                    task.DueDate.ToString("yyyy-MM-dd").PadRight(20) + 
                     task.Project.PadRight(20) + 
                     task.Status.PadRight(20) + done);
             }
