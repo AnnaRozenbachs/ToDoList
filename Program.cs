@@ -22,7 +22,6 @@ void StartApplication()
     Console.WriteLine("(4) Save");
 
     
-    //This will run until you press 4 for saving
     while (true)
     {
         //Input from user
@@ -53,20 +52,19 @@ void StartApplication()
                     break;
                 case "4":
                     helper.Save(taskList);
-                    Environment.Exit(0);
                     break;
             }
         }
         catch (FormatException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("You have enter some wrong value format");
+            Console.WriteLine($"You have enter some wrong value format: {input}");
             Console.ForegroundColor = ConsoleColor.White;
         }
         catch (ArgumentOutOfRangeException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("A error occured. Check if you have enter correct id.");
+            Console.WriteLine($"A error occured. Check if you have enter correct id:  {input}");
             Console.ForegroundColor = ConsoleColor.White;
         }
     }

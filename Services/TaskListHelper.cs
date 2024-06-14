@@ -9,7 +9,7 @@ using ToDoList.Model;
 
 namespace ToDoList.Services
 {
-    public class TaskListHelper
+    public class TaskListHelper :ITaskListHelper
     {
         private string jsonFile = System.IO.Path.GetFullPath(@"..\..\..\TaskList.json");
 
@@ -133,10 +133,10 @@ namespace ToDoList.Services
         //Save tasks to file
         public void Save(List<ToDoTask> taskList)
         {
-            using (var stramWriter = new StreamWriter(jsonFile))
+            using (var streamWriter = new StreamWriter(jsonFile))
             {
-                stramWriter.Write(JsonConvert.SerializeObject(taskList, Formatting.Indented));
-                stramWriter.Close();
+                streamWriter.Write(JsonConvert.SerializeObject(taskList, Formatting.Indented));
+                streamWriter.Close();
             }
         }
     }
