@@ -11,17 +11,30 @@ namespace ToDoList.Services
 {
     public class TaskListHelper :ITaskListHelper
     {
-        private string jsonFile = System.IO.Path.GetFullPath(@"..\..\..\TaskList.json");
+        private string jsonFile = System.IO.Path.GetFullPath(@"../../../TaskList.json");
 
         //Load and read tasks from file
         public List<ToDoTask> GetTaskList()
         {           
             var taskList = new List<ToDoTask>();
-            using (StreamReader sr = new StreamReader(jsonFile))
+
+            try
             {
-                var jsonData = sr.ReadToEnd();
-                taskList = JsonConvert.DeserializeObject<List<ToDoTask>>(jsonData);
-            };
+                if (File.Exists(jsonFile))
+                {
+                    using (StreamReader sr = new StreamReader(jsonFile))
+                    {
+                        var jsonData = sr.ReadToEnd();
+                        taskList = JsonConvert.DeserializeObject<List<ToDoTask>>(jsonData);
+                    };
+
+                }
+
+            }
+            catch(Exception ex) 
+            {
+                ConsoleWrite($"Something went wrong when reading from file. {ex.Message}", ConsoleColor.Red);
+            }
             return taskList;
         }
 
@@ -30,22 +43,14 @@ namespace ToDoList.Services
         public ToDoTask AddNewTask()
         {
             Random r = new Random();
-            Console.WriteLine("Add title: ");
-            string title = Console.ReadLine();
-            Console.WriteLine("Add project: ");
-            string project = Console.ReadLine();
-            Console.WriteLine("Add status: ");
-            string status = Console.ReadLine();
-            Console.WriteLine("Add duedate: ");
-            string duedate = Console.ReadLine();
 
             var task = new ToDoTask()
             {
                 Id = r.Next(1,1000),
-                Title = title,
-                Project = project,
-                Status = status,
-                DueDate = Convert.ToDateTime(duedate)
+                Title = ConsoleWrite("Add title: ", ConsoleColor.White, true),
+                Project = ConsoleWrite("Add project: ", ConsoleColor.White, true),
+                Status = ConsoleWrite("Add status: ", ConsoleColor.White, true),
+                DueDate =Convert.ToDateTime(ConsoleWrite("Add duedate: ", ConsoleColor.White, true)),
 
             };
             return task;           
@@ -57,30 +62,22 @@ namespace ToDoList.Services
         public List<ToDoTask> EditTask(ToDoTask task, List<ToDoTask> taskList)
         {
 
-            Console.WriteLine("Edit title (1) project (2) status (3) duedate (4) done (5). Enter (6) for remove");
+            ConsoleWrite("Edit title (1) project (2) status (3) duedate (4) done (5). Enter (6) for remove", ConsoleColor.White);
             
             var inputValue = Console.ReadLine();
             switch (inputValue)
             {
                 case "1":
-                    Console.WriteLine("Edit title: ");
-                    var title = Console.ReadLine();
-                    taskList[taskList.IndexOf(task)].Title = title;
+                    taskList[taskList.IndexOf(task)].Title = ConsoleWrite("Edit title: ", ConsoleColor.White, true); 
                     break;
                 case "2":
-                    Console.WriteLine("Edit project: ");
-                    var project = Console.ReadLine(); ;
-                    taskList[taskList.IndexOf(task)].Project = project;
+                    taskList[taskList.IndexOf(task)].Project = ConsoleWrite("Edit project: ", ConsoleColor.White, true);
                     break;
                 case "3":
-                    Console.WriteLine("Edit status: ");
-                    var status = Console.ReadLine();
-                    taskList[taskList.IndexOf(task)].Status = status;
+                    taskList[taskList.IndexOf(task)].Status = ConsoleWrite("Edit status: ", ConsoleColor.White, true);
                     break;
                 case "4":
-                    Console.WriteLine("Edit duedate: ");
-                    var duedate = Console.ReadLine();
-                    taskList[taskList.IndexOf(task)].DueDate = Convert.ToDateTime(duedate);
+                    taskList[taskList.IndexOf(task)].DueDate = Convert.ToDateTime(ConsoleWrite("Edit duedate: ", ConsoleColor.White, true));
                     break;
                 case "5":
                     taskList[taskList.IndexOf(task)].Done = true;
@@ -96,8 +93,8 @@ namespace ToDoList.Services
 
         public void ShowTaskList(List<ToDoTask> taskList)
         {
-            Console.WriteLine("Choose how you want to show the list. (1) Sorted by date (2) Sorted by project");
-            var sortedValue = Console.ReadLine();
+            var sortedValue = ConsoleWrite("Choose how you want to show the list. (1) Sorted by date (2) Sorted by project", ConsoleColor.White, true);
+
             switch (sortedValue)
             {
                 case "1":
@@ -107,37 +104,63 @@ namespace ToDoList.Services
                     taskList = taskList.OrderBy(t => t.Project).ToList();
                     break;
             }
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(
+
+            ConsoleWrite(
                 "Id".PadRight(20) + 
                 "Title".PadRight(20) + 
                 "DueDate".PadRight(20) + 
                 "Project".PadRight(20) + 
                 "Status".PadRight(20) + 
-                "Done");
+                "Done", ConsoleColor.Yellow);
 
-            Console.ForegroundColor = ConsoleColor.White;
             foreach (var task in taskList)
             {
                 var done = task.Done == true ? "Yes" : "No";
 
-                Console.WriteLine(
+                ConsoleWrite(
                     task.Id.ToString().PadRight(20) +  
                     task.Title.PadRight(20) + 
                     task.DueDate.ToString("yyyy-MM-dd").PadRight(20) + 
                     task.Project.PadRight(20) + 
-                    task.Status.PadRight(20) + done);
+                    task.Status.PadRight(20) + done, ConsoleColor.White);
             }
+        }
+
+        public string ConsoleWrite(string message, ConsoleColor color, bool needInput = false, ConsoleColor defaultColour = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            if (!string.IsNullOrEmpty(message))
+            {
+               Console.WriteLine(message);
+            }
+            Console.ForegroundColor = defaultColour;
+
+            return needInput? Console.ReadLine() : string.Empty;
         }
 
         //Save tasks to file
         public void Save(List<ToDoTask> taskList)
         {
-            using (var streamWriter = new StreamWriter(jsonFile))
+            try
             {
-                streamWriter.Write(JsonConvert.SerializeObject(taskList, Formatting.Indented));
-                streamWriter.Close();
+                if (!File.Exists(jsonFile))
+                {
+                    File.Create(jsonFile);
+                }
+                using (var streamWriter = new StreamWriter(jsonFile))
+                {
+                    streamWriter.Write(JsonConvert.SerializeObject(taskList, Formatting.Indented));
+                    streamWriter.Close();
+                }
+
             }
+            catch (Exception e)
+            {
+                ConsoleWrite($"Something went wrong when saving. {e.Message}", ConsoleColor.Red);
+            }
+
+
+            
         }
     }
 }
