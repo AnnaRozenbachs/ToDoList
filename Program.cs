@@ -60,13 +60,13 @@ void StartApplication()
         catch (FormatException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ogiltigt format på något av fälten");
+            Console.WriteLine("You have enter some wrong value format");
             Console.ForegroundColor = ConsoleColor.White;
         }
         catch (ArgumentOutOfRangeException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ett fel inträffade och det gick inte att uppdatera. Kolla så att id:t stämmer.");
+            Console.WriteLine("A error occured. Check if you have enter correct id.");
             Console.ForegroundColor = ConsoleColor.White;
         }
     }
